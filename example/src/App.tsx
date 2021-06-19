@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, Button, Image } from 'react-native';
-import PhotoPicker from 'react-native-photo-picker';
+import PhotoPicker from '../../src';
 import type { ImageAsset } from 'src/types';
 
 export default function App() {
@@ -24,7 +24,6 @@ export default function App() {
           PhotoPicker.openGallery({
             mediaType: 'photo',
             selectionLimit: 1,
-            editable: false,
           })
             .then((res: ImageAsset[]) => {
               res.forEach((item) => {

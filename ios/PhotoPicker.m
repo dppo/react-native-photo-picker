@@ -125,6 +125,7 @@ RCT_REMAP_METHOD(openCamera,
     manager.configuration.photoCanEdit = editable;
     
     manager.configuration.photoEditConfigur.onlyCliping = YES;
+    manager.configuration.photoEditConfigur.clippingMinSize = CGSizeMake(30, 30);
     
     return manager;
 }
