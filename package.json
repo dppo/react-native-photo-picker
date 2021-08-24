@@ -1,6 +1,6 @@
 {
   "name": "@dppo/react-native-photo-picker",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "react-native photo/image picker for android and ios",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
