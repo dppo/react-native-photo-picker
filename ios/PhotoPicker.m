@@ -16,7 +16,7 @@ RCT_REMAP_METHOD(openGallery,
     HXPhotoManager *manager = [self handlerPhotoManagerWithOptions:options];
     
     @PPWeakObj(self);
-    [[PPWindowManager shareManager].getMainWindow.rootViewController hx_presentSelectPhotoControllerWithManager:manager didDone:^(NSArray<HXPhotoModel *> * _Nullable allList, NSArray<HXPhotoModel *> * _Nullable photoList, NSArray<HXPhotoModel *> * _Nullable videoList, BOOL isOriginal, UIViewController * _Nullable viewController, HXPhotoManager * _Nullable manager) {
+    [[[PPWindowManager shareManager] jsd_findVisibleViewController] hx_presentSelectPhotoControllerWithManager:manager didDone:^(NSArray<HXPhotoModel *> * _Nullable allList, NSArray<HXPhotoModel *> * _Nullable photoList, NSArray<HXPhotoModel *> * _Nullable videoList, BOOL isOriginal, UIViewController * _Nullable viewController, HXPhotoManager * _Nullable manager) {
         [selfWeak handlerSelectedPhotos:allList withResolver:resolve withRejecter:reject];
     } cancel:^(UIViewController * _Nullable viewController, HXPhotoManager * _Nullable manager) {
         reject(@"cancel", @"user select cancel", nil);
@@ -31,7 +31,7 @@ RCT_REMAP_METHOD(openCamera,
     HXPhotoManager *manager = [self handlerPhotoManagerWithOptions:options];
     
     @PPWeakObj(self);
-    [[[PPWindowManager shareManager] getMainWindow].rootViewController hx_presentCustomCameraViewControllerWithManager:manager done:^(HXPhotoModel *model, HXCustomCameraViewController *viewController) {
+    [[[PPWindowManager shareManager] jsd_findVisibleViewController] hx_presentCustomCameraViewControllerWithManager:manager done:^(HXPhotoModel *model, HXCustomCameraViewController *viewController) {
         [selfWeak handlerSelectedPhotos:@[model] withResolver:resolve withRejecter:reject];
     } cancel:^(HXCustomCameraViewController *viewController) {
         reject(@"cancel", @"user select cancel", nil);

@@ -39,4 +39,25 @@ static PPWindowManager* _instance = nil;
   return nil;
 }
 
+
+- (UIViewController *)jsd_findVisibleViewController
+{
+  UIViewController* currentViewController = [self getMainWindow].rootViewController;
+  BOOL runLoopFind = YES;
+  while (runLoopFind) {
+    if (currentViewController.presentedViewController) {
+      currentViewController = currentViewController.presentedViewController;
+    } else {
+      if ([currentViewController isKindOfClass:[UINavigationController class]]) {
+        currentViewController = ((UINavigationController *)currentViewController).visibleViewController;
+      } else if ([currentViewController isKindOfClass:[UITabBarController class]]) {
+        currentViewController = ((UITabBarController* )currentViewController).selectedViewController;
+      } else {
+        break;
+      }
+    }
+  }
+  return currentViewController;
+}
+
 @end

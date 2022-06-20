@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIWindow *)getMainWindow;
 
+- (UIViewController *)jsd_findVisibleViewController;
+
 @end
 
 NS_ASSUME_NONNULL_END
