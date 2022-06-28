@@ -45,11 +45,11 @@ RCT_REMAP_METHOD(openCamera,
     NSMutableArray *images = [NSMutableArray array];
     dispatch_group_t group = dispatch_group_create();
     for (int i = 0; i<photos.count; i++) {
-        NSString *imageName = [NSString stringWithFormat:@"%.0f_%d.jpg", [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970], i];
-        NSString *imagePath = [NSString stringWithFormat:@"%@%@",tmpPath, imageName];
         HXPhotoModel *photoModel = photos[i];
         dispatch_group_enter(group);
         if (photoModel.subType == HXPhotoModelMediaSubTypePhoto) {
+            NSString *imageName = [NSString stringWithFormat:@"%.0f_%d.jpg", [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970], i];
+            NSString *imagePath = [NSString stringWithFormat:@"%@%@",tmpPath, imageName];
             if (photoModel.photoEdit) {
                 [images addObject:[selfWeak handlerImageAssetData:[UIImage imageWithData:photoModel.photoEdit.editPreviewData] imageName:imageName imagePath:imagePath]];
                 dispatch_group_leave(group);
@@ -88,7 +88,25 @@ RCT_REMAP_METHOD(openCamera,
                 }
             }
         }else if(photoModel.subType == HXPhotoModelMediaSubTypeVideo) {
-            // video
+            if (photoModel.type == HXPhotoModelMediaTypeVideo) {
+                [photoModel exportVideoWithPresetName:AVAssetExportPresetHighestQuality startRequestICloud:nil iCloudProgressHandler:nil exportProgressHandler:^(float progress, HXPhotoModel * _Nullable model) {
+                } success:^(NSURL * _Nullable videoURL, HXPhotoModel * _Nullable model) {
+                    [images addObject:@{
+                        @"mimeType":@"video/mp4",
+                        @"videoPath":videoURL.path,
+                        @"time":model.videoTime,
+                        @"size":[NSNumber numberWithUnsignedInteger:model.assetByte]
+                    }];
+                    dispatch_group_leave(group);
+                } failed:^(NSDictionary * _Nullable info, HXPhotoModel * _Nullable model) {
+                    dispatch_group_leave(group);
+                }];
+            }else {
+                if (photoModel.cameraVideoType == HXPhotoModelMediaTypeCameraVideoTypeLocal) {
+                }else if (photoModel.cameraVideoType == HXPhotoModelMediaTypeCameraVideoTypeNetWork) {
+                }
+                dispatch_group_leave(group);
+            }
         }
     }
     dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
