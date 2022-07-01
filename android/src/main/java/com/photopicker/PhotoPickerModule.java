@@ -90,6 +90,8 @@ public class PhotoPickerModule extends ReactContextBaseJavaModule {
             map.putString("mimeType", item.getMimeType());
             map.putInt("width", item.getWidth());
             map.putInt("height", item.getHeight());
+            map.putDouble("time", item.getDuration());
+            map.putDouble("size", item.getSize());
             images.pushMap(map);
           }
           promise.resolve(images);
